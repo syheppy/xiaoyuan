@@ -1,0 +1,6 @@
+{
+  "name": "广东建院·校园闲置循环",
+  "description": "广东建设职业技术学院官方认证校园二手闲置与互助流转平台，支持真实校内当面验货、校区切换、面交预约与即时沟通。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
