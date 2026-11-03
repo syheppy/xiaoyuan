@@ -1199,9 +1199,25 @@ export function filterWantedItems(
   searchQuery: string,
   category: string
 ): WantedItem[] {
+  const CATEGORY_MAP: Record<string, string> = {
+    '工程制图': '建筑与工程绘图',
+    '宿舍生活': '宿舍生活好物',
+    '宿舍好物': '宿舍生活好物',
+    '教材书籍': '教材与考证',
+    '数码周边': '数码配件',
+  };
+
   return items.filter((item) => {
-    if (category && category !== '全部求购' && item.category !== category) {
-      return false;
+    if (
+      category &&
+      category !== '全部求购' &&
+      category !== '全部' &&
+      category !== 'all'
+    ) {
+      const targetCategory = CATEGORY_MAP[category] || category;
+      if (item.category !== targetCategory) {
+        return false;
+      }
     }
     if (searchQuery && searchQuery.trim() !== '') {
       const q = searchQuery.trim().toLowerCase();

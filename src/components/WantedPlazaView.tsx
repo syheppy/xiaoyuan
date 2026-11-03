@@ -19,17 +19,17 @@ interface WantedPlazaViewProps {
 }
 
 const WANTED_CATEGORIES = [
-  '全部求购',
-  '建筑与工程绘图',
-  '宿舍生活好物',
-  '教材与考证',
-  '数码配件',
+  { label: '全部', value: 'all' },
+  { label: '工程制图', value: '建筑与工程绘图' },
+  { label: '宿舍好物', value: '宿舍生活好物' },
+  { label: '教材书籍', value: '教材与考证' },
+  { label: '数码配件', value: '数码配件' },
 ] as const;
 
 const QUICK_DESC_TAGS = [
-  '下周上课急用',
-  '功能正常即可',
-  '宿舍楼下自提',
+  '下周急用',
+  '功能完好即可',
+  '随时宿舍楼下自提',
 ];
 
 const WANTED_TEMPLATES: {
@@ -90,7 +90,7 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
   unreadTotal,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('全部求购');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showPostModal, setShowPostModal] = useState(false);
   const [justPostedBanner, setJustPostedBanner] = useState<string | null>(null);
 
@@ -159,7 +159,7 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
     }
 
     onAddWanted(result.item);
-    setSelectedCategory('全部求购');
+    setSelectedCategory('all');
     setSearchQuery('');
     setJustPostedBanner(`已成功发布求购：「${result.item.title}」`);
     setNewTitle('');
@@ -170,102 +170,83 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#FAFAFA] text-text-main font-sans flex flex-col relative antialiased pb-36">
-      {/* 顶部轻量导航与状态栏 */}
-      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md px-5 py-3.5 flex items-center justify-between border-b border-black/[0.03]">
-        <div className="flex items-center gap-2">
-          <h1 className="text-[18px] font-bold text-text-main tracking-tight">
+    <div className="w-full min-h-screen bg-[#F8F9FA] text-on-surface font-sans flex flex-col relative antialiased pb-32">
+      {/* 顶部吸顶区域：导航标题 + 搜索 + 标签分类 */}
+      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md px-4 pt-3 pb-2.5 border-b border-black/[0.04]">
+        {/* 第一行：页面标题与校区选择 */}
+        <div className="flex items-center justify-between">
+          <h1 className="text-[17px] font-bold text-on-surface tracking-tight">
             求购广场
           </h1>
-          <span className="text-[11px] px-2 py-0.5 rounded-full bg-brand-light text-brand font-medium">
-            校内互助
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={onToggleCampus}
             aria-label={`切换校区，当前为${campus}`}
-            className="flex items-center gap-1.5 bg-black/[0.03] border border-black/[0.04] px-2.5 py-1 rounded-full shrink-0 active:scale-95 transition-transform"
+            className="flex items-center gap-1.5 bg-surface-container-low px-3 py-1 rounded-full shrink-0 active:scale-95 transition-all cursor-pointer"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-            <span className="text-[11px] font-medium text-text-sub whitespace-nowrap">
+            <span className="text-[11.5px] font-medium text-secondary whitespace-nowrap">
               {campus}
             </span>
-            <span className="material-symbols-outlined text-[14px] text-text-tertiary">
+            <span className="material-symbols-outlined !text-[14px] text-outline">
               keyboard_arrow_down
             </span>
           </button>
         </div>
-      </header>
 
-      {/* 搜索栏 */}
-      <section className="px-5 pt-4 pb-2">
-        <div className="flex items-center gap-2 bg-white rounded-2xl px-3.5 py-2.5 border border-black/[0.04] shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-          <span className="material-symbols-outlined text-[18px] text-text-tertiary">
-            search
-          </span>
-          <input
-            aria-label="搜索求购需求"
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="搜索求购的工程制图仪、小电锅、教材…"
-            className="w-full bg-transparent border-none p-0 text-[13px] text-text-main placeholder-text-tertiary focus:outline-none focus:ring-0"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery('')}
-              className="text-xs text-text-tertiary hover:text-text-main shrink-0"
-            >
-              清除
-            </button>
-          )}
+        {/* 第二行：简约搜索输入栏 */}
+        <div className="mt-2.5">
+          <div className="relative flex items-center h-9 w-full rounded-full bg-[#F2F3F5] px-3.5 transition-all focus-within:bg-white focus-within:ring-2 focus-within:ring-primary/20">
+            <span className="material-symbols-outlined text-outline !text-[18px] mr-2 shrink-0">
+              search
+            </span>
+            <input
+              aria-label="搜索求购需求"
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="搜索急需的制图仪、小电锅、教材…"
+              className="w-full bg-transparent border-none p-0 text-[13px] text-on-surface placeholder:text-outline focus:outline-none focus:ring-0"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="text-[11px] text-outline hover:text-on-surface px-1 shrink-0 cursor-pointer"
+              >
+                清除
+              </button>
+            )}
+          </div>
         </div>
-      </section>
 
-      {/* 分类轻标签 */}
-      <section className="px-5 py-3">
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+        {/* 第三行：精简分类标签 */}
+        <div className="mt-2.5 flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
           {WANTED_CATEGORIES.map((cat) => {
-            const active = selectedCategory === cat;
+            const active = selectedCategory === cat.value;
             return (
               <button
-                key={cat}
+                key={cat.value}
                 type="button"
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1 rounded-full text-[12px] font-medium shrink-0 transition-colors whitespace-nowrap ${
+                onClick={() => setSelectedCategory(cat.value)}
+                className={`px-3 py-1 rounded-full text-[12px] shrink-0 transition-all whitespace-nowrap cursor-pointer ${
                   active
-                    ? 'bg-brand text-white shadow-sm'
-                    : 'bg-white text-text-sub border border-black/[0.04] hover:bg-black/[0.02]'
+                    ? 'bg-neutral-900 text-white font-medium shadow-2xs'
+                    : 'bg-surface-container-low text-secondary hover:text-on-surface'
                 }`}
               >
-                {cat}
+                {cat.label}
               </button>
             );
           })}
         </div>
-      </section>
+      </header>
 
-      {/* 校园信任小微标 */}
-      <section className="px-5 py-1.5">
-        <div className="flex items-center justify-between text-[11px] text-text-tertiary px-1">
-          <span className="flex items-center gap-1">
-            <span className="material-symbols-outlined text-[13px] text-emerald-600">
-              verified
-            </span>
-            建院校友实名认证 · 宿舍楼下面交
-          </span>
-          <span>共 {10 + wantedItems.length} 条急需需求</span>
-        </div>
-      </section>
-
-      {/* 发布成功反馈横幅 */}
+      {/* 发布成功反馈通知 */}
       {justPostedBanner && (
-        <div className="mx-5 mt-2 px-3.5 py-2.5 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-between gap-2">
+        <div className="mx-4 mt-3 px-3.5 py-2.5 rounded-2xl bg-emerald-50 border border-emerald-200/60 flex items-center justify-between gap-2 shadow-2xs">
           <div className="flex items-center gap-2 min-w-0">
-            <span className="material-symbols-outlined material-fill text-emerald-600 text-[18px] shrink-0">
+            <span className="material-symbols-outlined material-fill text-emerald-600 !text-[18px] shrink-0">
               check_circle
             </span>
             <p className="text-xs font-medium text-emerald-900 truncate">
@@ -275,101 +256,107 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
           <button
             type="button"
             onClick={() => setJustPostedBanner(null)}
-            className="text-[11px] text-emerald-700 hover:underline shrink-0"
+            className="text-[11px] text-emerald-700 font-medium hover:underline shrink-0 cursor-pointer"
           >
-            知道了
+            关闭
           </button>
         </div>
       )}
 
-      {/* 求购内容列表 */}
-      <main className="px-5 pt-3 pb-6 space-y-4 flex-1">
+      {/* 主求购列表 */}
+      <main className="px-4 pt-3.5 space-y-3 flex-1">
         {filteredWanted.length === 0 ? (
-          <div className="bg-white rounded-2xl p-8 text-center space-y-2.5 border border-black/[0.03]">
-            <p className="text-sm font-semibold text-text-main">
-              当前分类暂无匹配的求购需求
+          <div className="bg-white rounded-2xl p-8 text-center space-y-2.5 border border-black/[0.03] shadow-2xs">
+            <div className="w-12 h-12 mx-auto rounded-full bg-surface-container-low flex items-center justify-center text-outline">
+              <span className="material-symbols-outlined !text-[24px]">
+                inbox
+              </span>
+            </div>
+            <p className="text-[13.5px] font-semibold text-on-surface">
+              暂无匹配的求购需求
             </p>
-            <p className="text-xs text-text-tertiary">
-              你可以直接发布一条求购，同校学长学姐看到后会主动联系你
+            <p className="text-xs text-secondary max-w-xs mx-auto">
+              你可以发布一条求购，同校校友看到后会主动联系你
             </p>
             <button
               type="button"
               onClick={handleOpenPostModal}
-              className="mt-1 inline-flex items-center gap-1 px-4 py-2 rounded-full bg-brand text-white text-xs font-semibold shadow-xs"
+              className="mt-1 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary text-white text-xs font-medium shadow-xs hover:opacity-95 active:scale-95 transition-all cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[15px]">
+              <span className="material-symbols-outlined !text-[15px]">
                 edit_square
               </span>
-              <span>立即发布求购</span>
+              <span>发布第一条求购</span>
             </button>
           </div>
         ) : (
           filteredWanted.map((item) => {
-            const isMine = item.userName === '嚼不断的浓痰' || item.timeAgo === '刚刚';
+            const isMine =
+              item.userName === '嚼不断的浓痰' || item.timeAgo === '刚刚';
             return (
               <article
                 key={item.id}
-                className={`bg-card-bg rounded-2xl p-5 border transition hover:shadow-md ${
+                className={`bg-white rounded-2xl p-4 border transition-all ${
                   isMine
-                    ? 'border-brand/30 ring-1 ring-brand/10 shadow-[0_4px_16px_rgba(224,99,75,0.08)]'
-                    : 'border-black/[0.03] shadow-[0_2px_10px_rgba(0,0,0,0.02)]'
+                    ? 'border-primary/25 ring-1 ring-primary/10 shadow-[0_4px_16px_rgba(233,120,101,0.08)]'
+                    : 'border-black/[0.04] shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-md'
                 }`}
               >
-                {/* 用户与元信息 */}
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
+                {/* 顶部：发布者信息与发布时间 */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
                     <div
                       style={{
                         backgroundColor: item.avatarBg,
                         color: item.avatarText,
                       }}
-                      className="w-8 h-8 rounded-full font-semibold text-[12px] flex items-center justify-center shrink-0"
+                      className="w-8 h-8 rounded-full font-semibold text-xs flex items-center justify-center shrink-0 shadow-2xs"
                     >
                       {item.userSurname}
                     </div>
-                    <div>
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-[13px] font-semibold text-text-main">
-                          {item.userName}
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <span className="text-[13px] font-semibold text-on-surface truncate">
+                        {item.userName}
+                      </span>
+                      <span className="text-[11px] text-secondary bg-surface-container-low px-1.5 py-0.5 rounded-md shrink-0">
+                        {item.userDept}
+                      </span>
+                      {isMine && (
+                        <span className="text-[10px] text-primary bg-primary-fixed/50 px-1.5 py-0.5 rounded font-medium shrink-0">
+                          我的求购
                         </span>
-                        <span className="text-[10px] text-text-tertiary px-1.5 py-0.5 rounded bg-black/[0.03]">
-                          {item.userDept}
-                        </span>
-                        {isMine && (
-                          <span className="text-[10px] text-brand bg-brand-light px-1.5 py-0.5 rounded font-medium">
-                            我的求购
-                          </span>
-                        )}
-                      </div>
+                      )}
                     </div>
                   </div>
-                  <span className="text-[11px] text-text-tertiary whitespace-nowrap">
+                  <span className="text-[11px] text-outline shrink-0 whitespace-nowrap">
                     {item.timeAgo}
                   </span>
                 </div>
 
-                {/* 标题与预算 */}
-                <div className="flex items-baseline justify-between gap-2 mt-1">
-                  <h2 className="text-[14px] font-semibold text-text-main leading-snug">
+                {/* 标题与预期预算 */}
+                <div className="mt-2.5 flex items-baseline justify-between gap-2.5">
+                  <h2 className="text-[14.5px] font-semibold text-on-surface leading-snug line-clamp-2">
                     {item.title}
                   </h2>
-                  <div className="shrink-0 text-right tabular-nums">
-                    <span className="text-[11px] text-text-tertiary">预算</span>
-                    <span className="text-[15px] font-bold text-brand ml-0.5">
+                  <div className="shrink-0 text-right tabular-nums whitespace-nowrap">
+                    <span className="text-[11px] text-secondary mr-1">预算</span>
+                    <span className="text-base font-bold text-primary">
                       {item.budgetText}
                     </span>
                   </div>
                 </div>
 
-                {/* 描述内容 */}
-                <p className="text-[12px] text-text-sub mt-1.5 leading-relaxed">
-                  {item.description}
-                </p>
+                {/* 详细描述 */}
+                {item.description && (
+                  <p className="text-[12.5px] text-secondary mt-1.5 leading-relaxed line-clamp-2">
+                    {item.description}
+                  </p>
+                )}
 
-                {/* 底部自提地点与轻量行动按钮 */}
-                <div className="flex items-center justify-between pt-3 mt-2.5 border-t border-black/[0.03] gap-2">
-                  <div className="flex items-center gap-1 text-[11px] text-text-tertiary min-w-0">
-                    <span className="material-symbols-outlined text-[14px] shrink-0">
+                {/* 底部：自提位置与响应按钮 */}
+                <div className="flex items-center justify-between pt-3 mt-3 border-t border-outline-variant/15 gap-2">
+                  <div className="flex items-center gap-1 text-[11px] text-secondary min-w-0">
+                    <span className="material-symbols-outlined !text-[14px] text-outline shrink-0">
                       location_on
                     </span>
                     <span className="truncate">{item.location}</span>
@@ -379,7 +366,7 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
                       <button
                         type="button"
                         onClick={() => onDeleteWanted(item.id)}
-                        className="px-2.5 py-1.5 rounded-full bg-stone-100 text-text-sub hover:text-error text-[11px] font-medium transition"
+                        className="px-2.5 py-1 rounded-full text-secondary hover:text-error text-[11px] font-medium transition cursor-pointer"
                       >
                         撤回
                       </button>
@@ -387,9 +374,9 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
                     <button
                       type="button"
                       onClick={() => onRespondWanted(item)}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-brand-light text-brand text-[12px] font-medium hover:bg-brand/10 active:scale-95 transition whitespace-nowrap"
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-[12px] font-semibold hover:bg-primary hover:text-white active:scale-95 transition-all whitespace-nowrap cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-[14px]">
+                      <span className="material-symbols-outlined !text-[14px]">
                         chat
                       </span>
                       <span>我有闲置</span>
@@ -402,33 +389,33 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
         )}
       </main>
 
-      {/* 右下角极简悬浮“发求购”微按钮 (Aligned inside the 430px mobile container) */}
-      <aside className="fixed bottom-24 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-5 pointer-events-none z-30 flex justify-end">
+      {/* 右下角悬浮发求购按钮 */}
+      <aside className="fixed bottom-22 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-4 pointer-events-none z-30 flex justify-end">
         <button
           type="button"
           onClick={handleOpenPostModal}
-          className="pointer-events-auto flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#1F2329] hover:bg-brand text-white shadow-[0_8px_24px_rgba(31,35,41,0.22)] active:scale-95 transition-all cursor-pointer"
+          className="pointer-events-auto flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-neutral-900 hover:bg-primary text-white shadow-[0_6px_20px_rgba(0,0,0,0.18)] active:scale-95 transition-all cursor-pointer"
         >
-          <span className="material-symbols-outlined text-[16px]">
+          <span className="material-symbols-outlined !text-[17px]">
             edit_square
           </span>
-          <span className="text-[12px] font-semibold whitespace-nowrap">
+          <span className="text-[12.5px] font-semibold whitespace-nowrap">
             发求购
           </span>
         </button>
       </aside>
 
-      {/* 发求购二级页面视图 */}
+      {/* 发布求购二级弹窗 */}
       {showPostModal && (
         <div
           role="dialog"
           aria-modal="true"
           aria-label="发布求购"
-          className="fixed inset-0 z-[90] flex justify-center bg-black/20 backdrop-blur-[1px]"
+          className="fixed inset-0 z-[90] flex justify-center bg-black/35 backdrop-blur-xs"
         >
-          <div className="w-full max-w-[430px] min-h-screen bg-background text-on-surface flex flex-col shadow-xl overflow-y-auto">
-            {/* 顶部导航栏 (与其他二级页保持一致) */}
-            <header className="sticky top-0 z-30 bg-background/90 backdrop-blur-md border-b border-outline-variant/20 px-4 py-3">
+          <div className="w-full max-w-[430px] min-h-screen bg-[#F8F9FA] text-on-surface flex flex-col shadow-xl overflow-y-auto">
+            {/* 顶部导航 */}
+            <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-black/[0.04] px-4 py-3">
               <div className="flex items-center justify-between h-10">
                 <button
                   type="button"
@@ -451,7 +438,7 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
             >
               {/* 快捷模版 */}
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
-                <span className="text-xs text-secondary shrink-0">常用：</span>
+                <span className="text-xs text-secondary shrink-0">快捷常用：</span>
                 {WANTED_TEMPLATES.map((tpl) => (
                   <button
                     key={tpl.label}
@@ -478,13 +465,13 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
               )}
 
               {/* 卡片一：求购物品与详情 */}
-              <div className="bg-white rounded-2xl border border-outline-variant/30 shadow-[0_2px_12px_rgba(0,0,0,0.02)] p-4 space-y-4">
+              <div className="bg-white rounded-2xl border border-black/[0.04] shadow-[0_2px_12px_rgba(0,0,0,0.02)] p-4 space-y-4">
                 <div className="space-y-1.5">
                   <label
                     htmlFor="wanted-title-input"
                     className="text-xs font-semibold text-secondary block"
                   >
-                    求购物品
+                    求购物品名称
                   </label>
                   <input
                     id="wanted-title-input"
@@ -496,7 +483,7 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
                       setPostError('');
                     }}
                     placeholder="请输入你想收的物品名称"
-                    className="w-full bg-transparent text-sm font-medium text-on-surface placeholder:text-secondary/50 focus:outline-none pb-2 border-b border-outline-variant/20"
+                    className="w-full bg-transparent text-sm font-medium text-on-surface placeholder:text-outline focus:outline-none pb-2 border-b border-outline-variant/20"
                   />
                 </div>
 
@@ -505,15 +492,15 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
                     htmlFor="wanted-desc-input"
                     className="text-xs font-semibold text-secondary block"
                   >
-                    补充说明
+                    补充说明（选填）
                   </label>
                   <textarea
                     id="wanted-desc-input"
                     rows={3}
                     value={newDesc}
                     onChange={(e) => setNewDesc(e.target.value)}
-                    placeholder="简单描述成色要求或方便面交的时间（选填）"
-                    className="w-full rounded-xl bg-surface-container-low p-3 text-xs text-on-surface placeholder:text-secondary/50 focus:outline-none resize-none leading-relaxed"
+                    placeholder="简单描述成色要求或方便面交的时间"
+                    className="w-full rounded-xl bg-surface-container-low p-3 text-xs text-on-surface placeholder:text-outline focus:outline-none resize-none leading-relaxed"
                   />
                   <div className="flex flex-wrap gap-1.5 pt-1">
                     {QUICK_DESC_TAGS.map((tag) => (
@@ -531,7 +518,7 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
               </div>
 
               {/* 卡片二：预算与自提地点 */}
-              <div className="bg-white rounded-2xl border border-outline-variant/30 shadow-[0_2px_12px_rgba(0,0,0,0.02)] p-4 space-y-4">
+              <div className="bg-white rounded-2xl border border-black/[0.04] shadow-[0_2px_12px_rgba(0,0,0,0.02)] p-4 space-y-4">
                 {/* 预算范围 */}
                 <div className="space-y-2">
                   <span className="text-xs font-semibold text-secondary block">
@@ -570,7 +557,7 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
                   </div>
                 </div>
 
-                <div className="h-px bg-outline-variant/20" />
+                <div className="h-px bg-outline-variant/15" />
 
                 {/* 自提地点 */}
                 <div className="space-y-2">
@@ -587,7 +574,7 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
                           onClick={() => setNewLoc(spot)}
                           className={`px-3 py-1.5 rounded-xl text-xs transition-all cursor-pointer ${
                             active
-                              ? 'bg-primary text-white font-semibold'
+                              ? 'bg-neutral-900 text-white font-semibold'
                               : 'bg-surface-container-low text-on-surface hover:bg-surface-container'
                           }`}
                         >
@@ -603,7 +590,7 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
               <div className="pt-2 mt-auto">
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-2xl bg-primary text-white text-sm font-semibold hover:opacity-95 active:scale-[0.99] transition-all cursor-pointer"
+                  className="w-full py-3.5 rounded-2xl bg-primary text-white text-sm font-semibold hover:opacity-95 active:scale-[0.99] transition-all cursor-pointer shadow-xs"
                 >
                   确认发布
                 </button>
