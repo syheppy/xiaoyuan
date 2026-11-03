@@ -18,14 +18,6 @@ interface WantedPlazaViewProps {
   unreadTotal: number;
 }
 
-const WANTED_CATEGORIES = [
-  { label: '全部', value: 'all' },
-  { label: '工程制图', value: '建筑与工程绘图' },
-  { label: '宿舍好物', value: '宿舍生活好物' },
-  { label: '教材书籍', value: '教材与考证' },
-  { label: '数码配件', value: '数码配件' },
-] as const;
-
 const QUICK_DESC_TAGS = [
   '下周急用',
   '功能完好即可',
@@ -90,7 +82,6 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
   unreadTotal,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showPostModal, setShowPostModal] = useState(false);
   const [justPostedBanner, setJustPostedBanner] = useState<string | null>(null);
 
@@ -107,7 +98,7 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
   const filteredWanted = filterWantedItems(
     wantedItems,
     searchQuery,
-    selectedCategory
+    'all'
   );
 
   const pickupSpots = [
@@ -159,7 +150,6 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
     }
 
     onAddWanted(result.item);
-    setSelectedCategory('all');
     setSearchQuery('');
     setJustPostedBanner(`已成功发布求购：「${result.item.title}」`);
     setNewTitle('');
@@ -171,9 +161,9 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
 
   return (
     <div className="w-full min-h-screen bg-[#F8F9FA] text-on-surface font-sans flex flex-col relative antialiased pb-32">
-      {/* 顶部吸顶区域：导航标题 + 搜索 + 标签分类 */}
-      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md px-4 pt-3 pb-2.5 border-b border-black/[0.04]">
-        {/* 第一行：页面标题与校区选择 */}
+      {/* 顶部吸顶区域：导航标题 + 搜索 */}
+      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md px-4 pt-3.5 pb-3 border-b border-black/[0.04]">
+        {/* 页面标题与校区选择 */}
         <div className="flex items-center justify-between">
           <h1 className="text-[17px] font-bold text-on-surface tracking-tight">
             求购广场
@@ -194,7 +184,7 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
           </button>
         </div>
 
-        {/* 第二行：简约搜索输入栏 */}
+        {/* 简约搜索输入栏 */}
         <div className="mt-2.5">
           <div className="relative flex items-center h-9 w-full rounded-full bg-[#F2F3F5] px-3.5 transition-all focus-within:bg-white focus-within:ring-2 focus-within:ring-primary/20">
             <span className="material-symbols-outlined text-outline !text-[18px] mr-2 shrink-0">
@@ -218,27 +208,6 @@ export const WantedPlazaView: React.FC<WantedPlazaViewProps> = ({
               </button>
             )}
           </div>
-        </div>
-
-        {/* 第三行：精简分类标签 */}
-        <div className="mt-2.5 flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
-          {WANTED_CATEGORIES.map((cat) => {
-            const active = selectedCategory === cat.value;
-            return (
-              <button
-                key={cat.value}
-                type="button"
-                onClick={() => setSelectedCategory(cat.value)}
-                className={`px-3 py-1 rounded-full text-[12px] shrink-0 transition-all whitespace-nowrap cursor-pointer ${
-                  active
-                    ? 'bg-neutral-900 text-white font-medium shadow-2xs'
-                    : 'bg-surface-container-low text-secondary hover:text-on-surface'
-                }`}
-              >
-                {cat.label}
-              </button>
-            );
-          })}
         </div>
       </header>
 
