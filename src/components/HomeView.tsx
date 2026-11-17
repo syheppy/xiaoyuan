@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { ProductItem, ScreenId, filterProducts } from '../data/marketplaceData';
 import { BottomNavBar } from './BottomNavBar';
+import {
+  ZoneFreebieIcon,
+  ZoneFreshmanIcon,
+  ZoneGraduationIcon,
+  ZoneTextbookIcon,
+} from './CampusIcons';
 
 interface HomeViewProps {
   products: ProductItem[];
@@ -130,12 +136,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <button
               type="button"
               onClick={() => handleZoneClick('graduation')}
-              className="flex flex-col items-center group cursor-pointer rounded-2xl py-1 transition-colors hover:bg-amber-50/40"
+              className="flex flex-col items-center group cursor-pointer rounded-2xl py-1 transition-colors hover:bg-amber-50/35"
             >
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center transition-transform group-hover:scale-105 group-active:scale-95 duration-200">
-                <span className="material-symbols-outlined material-fill text-[24px]">
-                  school
-                </span>
+              <div className="w-12 h-12 rounded-[18px] bg-amber-50/90 ring-1 ring-amber-200/40 flex items-center justify-center shadow-[0_2px_8px_rgba(217,119,6,0.06)] transition-all duration-200 group-hover:-translate-y-0.5 group-hover:scale-105 group-active:scale-95">
+                <ZoneGraduationIcon />
               </div>
               <span className="mt-2 text-[13px] font-medium text-on-surface whitespace-nowrap">
                 毕业清仓
@@ -149,12 +153,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <button
               type="button"
               onClick={() => handleZoneClick('freshman')}
-              className="flex flex-col items-center group cursor-pointer rounded-2xl py-1 transition-colors hover:bg-rose-50/40"
+              className="flex flex-col items-center group cursor-pointer rounded-2xl py-1 transition-colors hover:bg-rose-50/35"
             >
-              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center transition-transform group-hover:scale-105 group-active:scale-95 duration-200">
-                <span className="material-symbols-outlined material-fill text-[24px]">
-                  local_mall
-                </span>
+              <div className="w-12 h-12 rounded-[18px] bg-[#FFF2EF] ring-1 ring-rose-200/45 flex items-center justify-center shadow-[0_2px_8px_rgba(224,99,75,0.06)] transition-all duration-200 group-hover:-translate-y-0.5 group-hover:scale-105 group-active:scale-95">
+                <ZoneFreshmanIcon />
               </div>
               <span className="mt-2 text-[13px] font-medium text-on-surface whitespace-nowrap">
                 新生专区
@@ -168,12 +170,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <button
               type="button"
               onClick={() => handleZoneClick('textbook')}
-              className="flex flex-col items-center group cursor-pointer rounded-2xl py-1 transition-colors hover:bg-blue-50/40"
+              className="flex flex-col items-center group cursor-pointer rounded-2xl py-1 transition-colors hover:bg-blue-50/35"
             >
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center transition-transform group-hover:scale-105 group-active:scale-95 duration-200">
-                <span className="material-symbols-outlined material-fill text-[24px]">
-                  menu_book
-                </span>
+              <div className="w-12 h-12 rounded-[18px] bg-blue-50/90 ring-1 ring-blue-200/40 flex items-center justify-center shadow-[0_2px_8px_rgba(37,99,235,0.06)] transition-all duration-200 group-hover:-translate-y-0.5 group-hover:scale-105 group-active:scale-95">
+                <ZoneTextbookIcon />
               </div>
               <span className="mt-2 text-[13px] font-medium text-on-surface whitespace-nowrap">
                 教材课件
@@ -187,12 +187,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <button
               type="button"
               onClick={() => handleZoneClick('freebie')}
-              className="flex flex-col items-center group cursor-pointer rounded-2xl py-1 transition-colors hover:bg-emerald-50/40"
+              className="flex flex-col items-center group cursor-pointer rounded-2xl py-1 transition-colors hover:bg-emerald-50/35"
             >
-              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center transition-transform group-hover:scale-105 group-active:scale-95 duration-200">
-                <span className="material-symbols-outlined material-fill text-[24px]">
-                  volunteer_activism
-                </span>
+              <div className="w-12 h-12 rounded-[18px] bg-emerald-50/90 ring-1 ring-emerald-200/40 flex items-center justify-center shadow-[0_2px_8px_rgba(5,150,105,0.06)] transition-all duration-200 group-hover:-translate-y-0.5 group-hover:scale-105 group-active:scale-95">
+                <ZoneFreebieIcon />
               </div>
               <span className="mt-2 text-[13px] font-medium text-on-surface whitespace-nowrap">
                 免费互助
